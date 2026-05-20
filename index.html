@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>swgoh-utils — design previews</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0d12;--bg-2:#11141c;--card:#141821;--line:#222734;--line-2:#323a4d;
+    --ink:#e8eaf0;--ink-2:#9aa1b4;--ink-3:#646b7e;--accent:#7fb7ff;
+    --mono:'Space Mono',monospace;--body:'Sora',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.6;
+    min-height:100vh;-webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(60% 50% at 50% -5%,rgba(127,183,255,.08),transparent 70%)}
+  .wrap{max-width:920px;margin:0 auto;padding:80px 28px 60px}
+  .kick{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:16px}
+  h1{font-size:clamp(30px,5vw,44px);font-weight:600;letter-spacing:-.02em;line-height:1.1;margin-bottom:14px}
+  .lede{color:var(--ink-2);font-size:17px;max-width:54ch;margin-bottom:48px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .card{display:flex;flex-direction:column;text-decoration:none;color:inherit;
+    background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:.2s}
+  .card:hover{border-color:var(--line-2);transform:translateY(-4px);
+    box-shadow:0 22px 44px -24px rgba(0,0,0,.7)}
+  .swatch{height:96px;display:flex;align-items:center;justify-content:center;gap:10px;position:relative}
+  .swatch.d1{background:linear-gradient(135deg,#04070d,#0a1220);border-bottom:1px solid var(--line)}
+  .swatch.d2{background:linear-gradient(135deg,#f4f1e9,#e9e4d7);border-bottom:1px solid var(--line)}
+  .chip{width:26px;height:26px;border-radius:50%}
+  .body{padding:22px 22px 24px}
+  .tag{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+  .name{font-size:20px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .name .arr{color:var(--accent);transition:.2s}
+  .card:hover .name .arr{transform:translate(4px,-4px)}
+  .desc{color:var(--ink-2);font-size:14.5px;line-height:1.55}
+  .feedback{margin-top:44px;border:1px dashed var(--line-2);border-radius:14px;padding:22px 24px;
+    background:var(--bg-2);font-size:14.5px;color:var(--ink-2)}
+  .feedback b{color:var(--ink);font-weight:600}
+  .feedback code{font-family:var(--mono);font-size:13px;color:var(--accent);background:rgba(127,183,255,.08);
+    padding:2px 7px;border-radius:5px}
+  footer{margin-top:40px;font-family:var(--mono);font-size:12px;color:var(--ink-3)}
+  footer a{color:var(--ink-2);text-decoration:none}
+  footer a:hover{color:var(--accent)}
+  @media(max-width:680px){.grid{grid-template-columns:1fr}.wrap{padding:54px 22px 44px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kick">// preview · swgohutils.com landing page</div>
+  <h1>Two design directions</h1>
+  <p class="lede">Early concepts for the swgoh-utils landing page. Open each, then let me know which direction feels right — or what to mix between them.</p>
+
+  <div class="grid">
+    <a class="card" href="./1/">
+      <div class="swatch d1">
+        <span class="chip" style="background:#3fe0ff;box-shadow:0 0 16px #3fe0ff"></span>
+        <span class="chip" style="background:#ffb454"></span>
+      </div>
+      <div class="body">
+        <div class="tag">Concept 01</div>
+        <div class="name">Holonet Terminal <span class="arr">↗</span></div>
+        <div class="desc">Dark KOTOR/HUD aesthetic — scanlines, console telemetry, tools as numbered modules.</div>
+      </div>
+    </a>
+
+    <a class="card" href="./2/">
+      <div class="swatch d2">
+        <span class="chip" style="background:#0f6048"></span>
+        <span class="chip" style="background:#b07a18"></span>
+      </div>
+      <div class="body">
+        <div class="tag">Concept 02</div>
+        <div class="name">Developer Org <span class="arr">↗</span></div>
+        <div class="desc">Refined editorial light theme — install snippet, three-step flow, GitHub-style repo cards.</div>
+      </div>
+    </a>
+  </div>
+
+  <div class="feedback">
+    <b>Leaving feedback?</b> Easiest is to open an issue on this repo, or just note the concept number and the URL of anything you'd change. Each design links out to the real <code>swgoh-utils</code> repos, so those are clickable too.
+  </div>
+
+  <footer>
+    swgoh-utils design preview · <a href="https://github.com/swgoh-utils">github.com/swgoh-utils</a>
+  </footer>
+</div>
+</body>
+</html>

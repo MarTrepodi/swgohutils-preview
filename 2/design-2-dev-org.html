@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>swgoh-utils — open-source tools for Galaxy of Heroes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,800&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f1e9;
+    --paper-2:#e9e4d7;
+    --card:#fbf9f4;
+    --ink:#1c1b16;
+    --ink-2:#54514a;
+    --ink-3:#8c887d;
+    --rule:#ddd7c9;
+    --rule-2:#cbc4b3;
+    --jade:#0f6048;
+    --jade-2:#0a4a37;
+    --kyber:#b07a18;
+    --serif:'Fraunces',Georgia,serif;
+    --sans:'Hanken Grotesk',sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.6;
+    -webkit-font-smoothing:antialiased;position:relative}
+  /* paper grain */
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E")}
+  .wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 28px}
+
+  /* nav */
+  nav{display:flex;justify-content:space-between;align-items:center;padding:26px 0;
+    border-bottom:1px solid var(--rule)}
+  .logo{font-family:var(--serif);font-weight:600;font-size:21px;letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
+  .logo .mark{width:13px;height:13px;background:var(--jade);border-radius:50%;box-shadow:0 0 0 4px rgba(15,96,72,.12)}
+  .nav-links{display:flex;gap:26px;font-size:14.5px;font-weight:500}
+  .nav-links a{color:var(--ink-2);text-decoration:none;transition:.15s}
+  .nav-links a:hover{color:var(--jade)}
+  .nav-cta{font-family:var(--mono);font-size:13px;color:var(--jade);text-decoration:none;
+    border:1px solid var(--rule-2);padding:8px 15px;border-radius:7px;transition:.15s}
+  .nav-cta:hover{background:var(--jade);color:var(--paper);border-color:var(--jade)}
+
+  /* hero */
+  .hero{padding:78px 0 60px;display:grid;grid-template-columns:1.05fr .95fr;gap:54px;align-items:center}
+  .eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;color:var(--jade);
+    text-transform:uppercase;margin-bottom:22px;display:flex;align-items:center;gap:9px}
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--jade)}
+  h1{font-family:var(--serif);font-weight:500;font-size:clamp(40px,5.4vw,64px);line-height:1.04;
+    letter-spacing:-.02em;margin-bottom:24px}
+  h1 em{font-style:italic;color:var(--jade)}
+  .sub{font-size:18px;color:var(--ink-2);max-width:42ch;margin-bottom:34px;line-height:1.65}
+  .hero-cta{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .btn{font-family:var(--sans);font-weight:600;font-size:15px;text-decoration:none;
+    padding:13px 24px;border-radius:9px;transition:.18s;display:inline-flex;align-items:center;gap:8px}
+  .btn-pri{background:var(--jade);color:var(--paper);box-shadow:0 6px 18px -8px rgba(15,96,72,.6)}
+  .btn-pri:hover{background:var(--jade-2);transform:translateY(-2px);box-shadow:0 10px 24px -8px rgba(15,96,72,.55)}
+  .btn-sec{color:var(--ink);border:1px solid var(--rule-2)}
+  .btn-sec:hover{border-color:var(--ink);background:var(--card)}
+
+  /* terminal card */
+  .term{background:#13211c;border-radius:13px;overflow:hidden;box-shadow:0 24px 50px -22px rgba(19,33,28,.55);
+    border:1px solid #1f3329}
+  .term-bar{display:flex;align-items:center;gap:7px;padding:13px 16px;background:#0f1a16;border-bottom:1px solid #1f3329}
+  .term-bar i{width:11px;height:11px;border-radius:50%;background:#2c4339}
+  .term-bar .t{margin-left:10px;font-family:var(--mono);font-size:12px;color:#5e7d70}
+  .term-body{padding:22px 20px 24px;font-family:var(--mono);font-size:13.5px;line-height:1.95;color:#cfe6da}
+  .term-body .c{color:#5e8472}
+  .term-body .p{color:#73d9ab}
+  .term-body .o{color:#9db8ac}
+  .term-body .hl{color:#ffd27a}
+  .term-body .w{color:#fff}
+
+  /* what-is strip */
+  .strip{background:var(--paper-2);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+    margin-top:20px}
+  .strip .wrap2{max-width:1080px;margin:0 auto;padding:40px 28px;display:grid;grid-template-columns:repeat(3,1fr);gap:34px}
+  .strip h3{font-family:var(--serif);font-size:19px;font-weight:600;margin-bottom:9px}
+  .strip .n{font-family:var(--mono);font-size:12px;color:var(--kyber);margin-bottom:14px;letter-spacing:.08em}
+  .strip p{font-size:14.5px;color:var(--ink-2);line-height:1.6}
+
+  /* repos */
+  .repos{padding:72px 0 30px}
+  .repos-head{margin-bottom:34px}
+  .repos-head h2{font-family:var(--serif);font-size:34px;font-weight:500;letter-spacing:-.01em}
+  .repos-head p{color:var(--ink-2);margin-top:8px;font-size:15.5px}
+  .cat{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);
+    margin:38px 0 16px;display:flex;align-items:center;gap:12px}
+  .cat::after{content:"";flex:1;height:1px;background:var(--rule)}
+  .cat:first-of-type{margin-top:0}
+  .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+  .repo{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:20px 21px;
+    text-decoration:none;color:inherit;transition:.18s;display:flex;flex-direction:column}
+  .repo:hover{border-color:var(--jade);transform:translateY(-3px);box-shadow:0 14px 30px -18px rgba(28,27,22,.4)}
+  .repo-name{font-family:var(--mono);font-weight:500;font-size:15.5px;color:var(--jade-2);margin-bottom:9px;
+    display:flex;align-items:center;gap:7px}
+  .repo:hover .repo-name{color:var(--jade)}
+  .repo-name .core-tag{font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:.06em;
+    background:var(--jade);color:var(--paper);padding:2px 7px;border-radius:20px;text-transform:uppercase}
+  .repo-desc{font-size:14px;color:var(--ink-2);line-height:1.55;flex:1;margin-bottom:16px}
+  .repo-meta{display:flex;align-items:center;gap:16px;font-size:12.5px;color:var(--ink-3)}
+  .ldot{display:flex;align-items:center;gap:6px}
+  .ldot i{width:10px;height:10px;border-radius:50%}
+  .stars{display:flex;align-items:center;gap:4px}
+  .stars svg{width:13px;height:13px;fill:var(--kyber)}
+
+  /* contribute */
+  .contribute{margin:30px 0 0;padding:40px 44px;background:var(--ink);color:var(--paper);border-radius:16px;
+    display:flex;justify-content:space-between;align-items:center;gap:30px;flex-wrap:wrap}
+  .contribute h3{font-family:var(--serif);font-size:26px;font-weight:500;margin-bottom:8px}
+  .contribute p{color:#b9b5a8;font-size:15px;max-width:48ch}
+  .contribute .btn-pri{background:var(--paper);color:var(--ink)}
+  .contribute .btn-pri:hover{background:#fff}
+
+  /* footer */
+  footer{margin-top:60px;border-top:1px solid var(--rule);padding:34px 0 56px}
+  .foot-top{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;font-size:14px;color:var(--ink-2)}
+  .foot-top a{color:var(--jade);text-decoration:none}
+  .foot-top a:hover{text-decoration:underline}
+  .foot-discl{margin-top:24px;font-size:12px;color:var(--ink-3);line-height:1.65;max-width:88ch;
+    border-top:1px dashed var(--rule);padding-top:18px}
+
+  @media(max-width:840px){
+    .hero{grid-template-columns:1fr;gap:36px;padding:54px 0 44px}
+    .strip .wrap2{grid-template-columns:1fr;gap:24px}
+    .nav-links{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <div class="logo"><span class="mark"></span>swgoh-utils</div>
+    <div class="nav-links">
+      <a href="#start">Get started</a>
+      <a href="#tools">Tools</a>
+      <a href="https://github.com/swgoh-utils/swgoh-comlink">Docs</a>
+    </div>
+    <a class="nav-cta" href="https://github.com/swgoh-utils">GitHub ↗</a>
+  </nav>
+
+  <section class="hero" id="start">
+    <div>
+      <div class="eyebrow">Community open source · free forever</div>
+      <h1>Open-source tooling for <em>Galaxy of Heroes</em>.</h1>
+      <p class="sub">A self-hosted toolkit for working with SWGOH game data. It starts with <strong>comlink</strong>, the API client you run yourself — everything else builds on top.</p>
+      <div class="hero-cta">
+        <a class="btn btn-pri" href="https://github.com/swgoh-utils/swgoh-comlink">Start with comlink
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.6" fill="none"/></svg>
+        </a>
+        <a class="btn btn-sec" href="https://github.com/swgoh-utils">View all 14 repos</a>
+      </div>
+    </div>
+    <div class="term" aria-hidden="true">
+      <div class="term-bar"><i></i><i></i><i></i><span class="t">~/swgoh-comlink</span></div>
+      <div class="term-body">
+<span class="c"># run the game-API client yourself</span><br>
+<span class="p">$</span> <span class="w">docker run</span> <span class="o">-d -p</span> <span class="hl">3200:3200</span> \<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="o">--name</span> comlink \<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ghcr.io/swgoh-utils/<span class="hl">swgoh-comlink</span><br>
+<span class="o">→ comlink listening on :3200</span><br><br>
+<span class="c"># then talk to it from python</span><br>
+<span class="p">&gt;&gt;&gt;</span> <span class="w">from</span> swgoh_comlink <span class="w">import</span> Comlink<br>
+<span class="p">&gt;&gt;&gt;</span> Comlink().get_player(<span class="hl">"ally_code"</span>)<br>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="strip">
+  <div class="wrap2">
+    <div><div class="n">01 / host</div><h3>Run comlink</h3><p>Deploy the self-hosted client via Docker or a prebuilt binary for Windows, macOS, or Linux. It speaks to the game's servers so you don't have to.</p></div>
+    <div><div class="n">02 / connect</div><h3>Pick a wrapper</h3><p>Use the Python or JavaScript client libraries to query comlink from your own bots, sites, and pipelines with a clean interface.</p></div>
+    <div><div class="n">03 / build</div><h3>Add the toolkit</h3><p>Layer on stat calculators, the maintained game-data mirror, and the asset extractor to turn raw responses into real features.</p></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <section class="repos" id="tools">
+    <div class="repos-head">
+      <h2>The toolkit</h2>
+      <p>Fourteen repositories, all open source. Here are the ones to know.</p>
+    </div>
+
+    <div class="cat">Core</div>
+    <div class="rgrid">
+      <a class="repo" href="https://github.com/swgoh-utils/swgoh-comlink">
+        <div class="repo-name">swgoh-comlink <span class="core-tag">start here</span></div>
+        <div class="repo-desc">The self-hosted API client at the center of the ecosystem. Shipped as a Docker image and as binaries for major platforms.</div>
+        <div class="repo-meta"><span class="ldot"><i style="background:#89e051"></i>Shell</span><span class="stars"><svg viewBox="0 0 16 16"><path d="M8 1l2.2 4.5 4.8.7-3.5 3.4.8 4.9L8 12.1 3.7 14.4l.8-4.9L1 6.2l4.8-.7z"/></svg>35</span><span>MIT</span></div>
+      </a>
+      <a class="repo" href="https://github.com/swgoh-utils/deploy-swgoh-comlink">
+        <div class="repo-name">deploy-swgoh-comlink</div>
+        <div class="repo-desc">Deployment recipes and container configuration to get a comlink instance up and running quickly.</div>
+        <div class="repo-meta"><span class="ldot"><i style="background:#384d54"></i>Dockerfile</span><span class="stars"><svg viewBox="0 0 16 16"><path d="M8 1l2.2 4.5 4.8.7-3.5 3.4.8 4.9L8 12.1 3.7 14.4l.8-4.9L1 6.2l4.8-.7z"/></svg>5</span><span>19 forks</span></div>
+      </a>
+    </div>
+
+    <div class="cat">Client libraries</div>
+    <div class="rgrid">
+      <a class="repo" href="https://github.com/swgoh-utils/comlink-python">
+        <div class="repo-name">comlink-python</div>
+        <div class="repo-desc">Python wrapper for swgoh-comlink. Idiomatic access to the client for scripts, services, and data pipelines.</div>
+        <div class="repo-meta"><span class="ldot"><i style="background:#3572A5"></i>Python</span><span class="stars"><svg viewBox="0 0 16 16"><path d="M8 1l2.2 4.5 4.8.7-3.5 3.4.8 4.9L8 12.1 3.7 14.4l.8-4.9L1 6.2l4.8-.7z"/></svg>5</span><span>MIT</span></div>
+      </a>
+      <a class="repo" href="https://github.com/swgoh-utils/comlink-js">
+        <div class="repo-name">comlink-js</div>
+        <div class="repo-desc">JavaScript / Node wrapper for swgoh-comlink. Drop it into web apps and Discord bots.</div>
+        <div class="repo-meta"><span class="ldot"><i style="background:#f1e05a"></i>JavaScript</span><span class="stars"><svg viewBox="0 0 16 16"><path d="M8 1l2.2 4.5 4.8.7-3.5 3.4.8 4.9L8 12.1 3.7 14.4l.8-4.9L1 6.2l4.8-.7z"/></svg>2</span><span>MIT</span></div>
+      </a>
+    </div>
+
+    <div class="cat">Stats &amp; data</div>
+    <div class="rgrid">
+      <a class="repo" href="https://github.com/swgoh-utils/swgoh-stat-calc">
+        <div class="repo-name">swgoh-stat-calc</div>
+        <div class="repo-desc">JS package for calculating exact unit stats from roster data — the maintained fork of Crinolo's calculator.</div>
+        <div class="repo-meta"><span class="ldot"><i style="background:#f1e05a"></i>JavaScript</span><span>MIT</span></div>
+      </a>
+      <a class="repo" href="https://github.com/swgoh-utils/swgoh-stats">
+        <div class="repo-name">swgoh-stats</div>
+        <div class="repo-desc">A service wrapping the stat calculator so you can compute unit stats over HTTP without hosting the math.</div>
+        <div class="repo-meta"><span class="ldot"><i style="background:#f1e05a"></i>JavaScript</span><span class="stars"><svg viewBox="0 0 16 16"><path d="M8 1l2.2 4.5 4.8.7-3.5 3.4.8 4.9L8 12.1 3.7 14.4l.8-4.9L1 6.2l4.8-.7z"/></svg>5</span><span>MIT</span></div>
+      </a>
+      <a class="repo" href="https://github.com/swgoh-utils/gamedata">
+        <div class="repo-name">gamedata</div>
+        <div class="repo-desc">A continuously refreshed mirror of parsed game data: units, gear, abilities, and more.</div>
+        <div class="repo-meta"><span class="ldot"><i style="background:#8a8a8a"></i>Data</span><span class="stars"><svg viewBox="0 0 16 16"><path d="M8 1l2.2 4.5 4.8.7-3.5 3.4.8 4.9L8 12.1 3.7 14.4l.8-4.9L1 6.2l4.8-.7z"/></svg>7</span><span>GPL-3.0</span></div>
+      </a>
+      <a class="repo" href="https://github.com/swgoh-utils/swgoh-ae2">
+        <div class="repo-name">swgoh-ae2</div>
+        <div class="repo-desc">Asset Extractor — download and extract the game's 2D textures for use in your own tools.</div>
+        <div class="repo-meta"><span class="ldot"><i style="background:#178600"></i>C#</span><span class="stars"><svg viewBox="0 0 16 16"><path d="M8 1l2.2 4.5 4.8.7-3.5 3.4.8 4.9L8 12.1 3.7 14.4l.8-4.9L1 6.2l4.8-.7z"/></svg>5</span><span>MIT</span></div>
+      </a>
+    </div>
+
+    <div class="contribute">
+      <div>
+        <h3>Built by the community, for the community.</h3>
+        <p>Everything here is open source and free. Forks and pull requests are welcome across all projects.</p>
+      </div>
+      <a class="btn btn-pri" href="https://github.com/orgs/swgoh-utils/repositories">Explore the org ↗</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="foot-top">
+      <div>© 2026 swgoh-utils · swgohutils.com</div>
+      <div>
+        <a href="https://github.com/swgoh-utils">Organization</a> ·
+        <a href="https://github.com/swgoh-utils/swgoh-comlink">comlink &amp; wiki</a> ·
+        <a href="https://github.com/orgs/swgoh-utils/repositories">All repositories</a>
+      </div>
+    </div>
+    <div class="foot-discl">
+      The developers and these tools are not affiliated with EA, Capital Games, Disney, or Lucasfilm. All software and resources are provided "as is", without warranty of any kind. You are responsible for your own usage of the software and resources. Star Wars: Galaxy of Heroes is a trademark of its respective owners.
+    </div>
+  </footer>
+</div>
+</body>
+</html>
